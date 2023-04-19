@@ -2,4 +2,6 @@ Learn Vue
 
 This is a basic beginner project using Vue.js and the Unsplash API.
 
-That reminds me – my API key is in the repo, better fix that. 
+The user can search for a term, and the API will return up to 30 responses, which the user can page through. 
+
+UI / UX / look & feel is not a priority.
