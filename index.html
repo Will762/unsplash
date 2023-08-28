@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Learn Vue</title>
+	<style type="text/css">
+		body {
+			background: #414141;
+		}
+
+		input,
+		.box {
+			width: 100px;
+			margin: 10px;
+			border: 0;
+			padding: 0;
+		}
+
+		.box {
+			height: 100px;
+			background-color: aliceblue;
+			display: inline-block;
+			background-size: cover;
+			background-position: center;
+		}
+
+		.message {
+			min-height: 50px;
+		}
+		
+		.message p {
+			color: red;
+			font-size: 14px;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="app">
+
+		<input v-model="searchTerm">
+		<button v-bind:disabled="searchDisabled" v-on:click="searchUnsplash">Search</button>
+		<button v-bind:disabled="prevDisabled" v-on:click="showPrev">Previous</button>
+		<button v-bind:disabled="nextDisabled" v-on:click="showNext">Next</button>
+		
+		<br>
+
+		<div class="box" v-bind:style="{ 'background-image': imgDisplayed }"></div>
+		<div class="message">
+			<p v-if="searchResults.length">Image {{ imgIndex + 1 }} of {{ searchResults.length }}</p>
+			<p v-if="lastSearched && !searchResults.length">No results, try again</p>
+		</div>
+	</div>
+
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script type="text/javascript">
+		const appElement = document.getElementById("app");
+		const app = Vue.createApp({
+			data() {
+				return {
+					maxResults: "30",
+					page: "1",
+					searchTerm: "",
+					lastSearched: "",
+					searchResults: [],
+					searchPages: 0,
+					imgIndex: 0,
+					searchDisabled: true,
+					prevDisabled: true,
+					nextDisabled: true,
+				}
+			},
+			watch: {
+				searchResults() {
+					if (this.searchResults.length > this.imgIndex + 1) {
+						this.nextDisabled = false;
+					}
+				},
+				imgIndex() {
+					if (this.imgIndex === 0) {
+						this.prevDisabled = true;
+					} else {
+						this.prevDisabled = false;
+					}
+					if (this.searchResults.length && this.searchResults.length === this.imgIndex + 1) {
+						this.nextDisabled = true;
+					} else {
+						this.nextDisabled = false;
+					}
+				},
+				searchTerm() {
+					if (this.searchTerm === this.lastSearched) {
+						this.searchDisabled = true;
+					} else {
+						this.searchDisabled = false;
+					}
+				},
+			},
+			methods: {
+				showNext() {
+					this.imgIndex++;
+				},
+				showPrev() {
+					this.imgIndex--;
+				},
+				async searchUnsplash() {
+					const sanitizedSearchTerm = this.searchTerm[0] === "&" ? this.searchTerm.substring(1) : this.searchTerm;
+					const response = await fetch(`./api/searchUnsplash.js?query=${sanitizedSearchTerm}&per_page=${this.maxResults}&page=${this.page}`);
+					const data = await response.json();
+					console.log(data);
+					this.searchResults = data['results'];
+					this.searchPages = data['total_pages'];
+					this.imgIndex = 0;
+					this.lastSearched = this.searchTerm;
+					this.searchDisabled = true;
+				},
+			},
+			computed: {
+				imgDisplayed() {
+					return this.searchResults.length ? `url(${this.searchResults[`${this.imgIndex}`]["urls"]["small_s3"]})` : "";
+				},
+			},
+		});
+
+		app.mount(appElement);
+	</script>
+</body>
+</html>
