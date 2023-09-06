@@ -1,0 +1,61 @@
+* {
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body {
+    background: #444444;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: aliceblue;
+}
+
+input,
+.search,
+.control-group {
+    width: 200px;
+    margin-top: 1em;
+}
+
+input,
+.search,
+.control-group * {
+    padding: .5em;
+}
+
+.control-group {
+    display: flex;
+}
+
+.control-group *  {
+    flex-basis: 100%;
+}
+
+.control-group * + * {
+    margin-left: .25em;
+}
+
+.box {
+    width: 200px;
+    height: 200px;
+    background-color: aliceblue;
+    display: inline-block;
+    background-size: cover;
+    background-position: center;
+}
+
+.message {
+    min-height: 50px;
+}
+
+.message p {
+    font-size: 1.25em;
+    color: #ff983d;
+}

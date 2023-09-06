@@ -1,58 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Learn Vue</title>
-	<style type="text/css">
-		body {
-			background: #414141;
-		}
-
-		input,
-		.box {
-			width: 100px;
-			margin: 10px;
-			border: 0;
-			padding: 0;
-		}
-
-		.box {
-			height: 100px;
-			background-color: aliceblue;
-			display: inline-block;
-			background-size: cover;
-			background-position: center;
-		}
-
-		.message {
-			min-height: 50px;
-		}
-		
-		.message p {
-			color: red;
-			font-size: 14px;
-		}
-
-	</style>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>Search Unsplash</title>
+	<link rel="stylesheet" href="./style.css"/>
 </head>
 <body>
 	<div id="app">
+		<div class="container">
+			<h1>Search Unsplash Images</h1>
+			<input v-model="searchTerm" placeholder="Search query">
+			<button class="search" v-bind:disabled="searchDisabled" v-on:click="searchUnsplash">Search</button>
+			<div class="control-group">
+				<button v-bind:disabled="prevDisabled" v-on:click="showPrev">Previous</button>
+				<button v-bind:disabled="nextDisabled" v-on:click="showNext">Next</button>	
+			</div>
+			
+			<br>
 
-		<input v-model="searchTerm">
-		<button v-bind:disabled="searchDisabled" v-on:click="searchUnsplash">Search</button>
-		<button v-bind:disabled="prevDisabled" v-on:click="showPrev">Previous</button>
-		<button v-bind:disabled="nextDisabled" v-on:click="showNext">Next</button>
-		
-		<br>
-
-		<div class="box" v-bind:style="{ 'background-image': imgDisplayed }"></div>
-		<div class="message">
-			<p v-if="searchResults.length">Image {{ imgIndex + 1 }} of {{ searchResults.length }}</p>
-			<p v-if="lastSearched && !searchResults.length">No results, try again</p>
+			<div class="box" v-bind:style="{ 'background-image': imgDisplayed }"></div>
+			<div class="message">
+				<p v-if="searchResults.length">Image {{ imgIndex + 1 }} of {{ searchResults.length }}</p>
+				<p v-if="lastSearched && !searchResults.length">No results, try again</p>
+			</div>
 		</div>
 	</div>
-
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 	<script type="text/javascript">
 		const appElement = document.getElementById("app");
